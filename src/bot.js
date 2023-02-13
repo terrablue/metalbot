@@ -21,7 +21,7 @@ const onMessage = async (from, to, message) => {
     return;
   }
 
-  const [command] = message.slice(1).split(" ");
+  const [command, ...params] = message.slice(1).split(" ");
   // must be a valid command
   if (!commandNames.some(eq(command))) {
     return;
@@ -32,7 +32,7 @@ const onMessage = async (from, to, message) => {
     return;
   }
 
-  (await commands[command](message)).forEach(line => client.say(to, line));
+  (await commands[command](params.join(" "))).forEach(line => client.say(to, line));
 };
 
 client.addListener("message", onMessage);

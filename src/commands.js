@@ -9,7 +9,7 @@ const re = /<.*>(?<name>.*)<\/a>/gu;
 
 export default {
   band: async query => {
-    const results = await (await fetch(uris.bands(query.toLowerCase()))).json();
+    const results = await (await fetch(uris.bands(query))).json();
     const {iTotalRecords, aaData} = results;
 
     // no results
