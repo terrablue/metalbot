@@ -6,16 +6,32 @@ const uris = {
 };
 
 const re = /<.*>(?<name>.*)<\/a>/gu;
+const maxTries = 10;
+
+const api = {
+  bands: async (query, tries = 0) => {
+    if (tries > maxTries) {
+      console.log("too many retries, exiting");
+      return null;
+    }
+    try {
+      return await (await fetch(uris.bands(query))).json();
+    } catch (error) {
+      console.log("fetch error, retrying");
+      console.log(error);
+      // retry
+      return api.bands(query, tries + 1);
+    }
+  },
+};
 
 export default {
   band: async query => {
-    let results;
-    try {
-      results = await (await fetch(uris.bands(query))).json();
-    } catch (error) {
-      console.log(error);
-      return ["error accessing api"];
+    const results = await api.bands(query);
+    if (results === null) {
+      return ["api error"];
     }
+
     const {iTotalRecords, aaData} = results;
 
     // no results
