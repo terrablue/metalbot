@@ -4,10 +4,12 @@ import commands from "./commands.js";
 
 config();
 
-const {irc_network, irc_user, irc_channels} = process.env;
-const channels = irc_channels.split(";");
+const {network, user, channels, password} = process.env;
 
-const client = new irc.Client(irc_network, irc_user, {channels});
+const client = new irc.Client(network, user, {
+  channels: channels.split(";"),
+  password,
+});
 
 const commandNames = Object.keys(commands);
 
