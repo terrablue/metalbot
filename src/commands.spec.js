@@ -6,6 +6,16 @@ export default test => {
     assert(result).equals(["no results"]);
   });
 
+  test.case("different cases", async assert => {
+    await Promise.all(["Blind Guardian", "BLIND GUARDIAN", "bLIND gUARDIAN"]
+      .map(async query => {
+        const result = await commands.band(query);
+        assert(result).equals([
+          "Blind Guardian [Germany]: Speed Metal (early); Power Metal (later)",
+        ]);
+      }));
+  });
+
   test.case("1-5 results", async assert => {
     const result = await commands.band("Crash Test");
     assert(result).equals([
