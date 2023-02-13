@@ -2,7 +2,7 @@ import {Path} from "runtime-compat/filesystem";
 
 const base = new Path("https://www.metal-archives.com/search");
 const uris = {
-  bands: query => base.join(`ajax-band-search/?query=${encodeURI(query)}`),
+  bands: query => base.join(`ajax-advanced/searching/bands/?exactBandMatch=1&bandName=${encodeURI(query)}`),
 };
 
 const re = /<.*>(?<name>.*)<\/a>/gu;
@@ -18,15 +18,16 @@ export default {
     }
 
     // too many results
-    if (iTotalRecords > 5) {
+    if (iTotalRecords > 10) {
       return ["too many results, refine your query"];
     }
 
     // 1-5 results
     return aaData
-      .map(([info, genre, country]) => ({
-        name: [...info.matchAll(re)][0].groups.name, genre, country,
+      .map(([info, genre, country, year]) => ({
+        name: [...info.matchAll(re)][0].groups.name, genre, country, year
       }))
-      .map(({name, genre, country}) => `${name} [${country}]: ${genre}`);
+      .map(({name, genre, country, year}) =>
+        `${name} [${country}, ${year}]: ${genre}`);
   },
 };

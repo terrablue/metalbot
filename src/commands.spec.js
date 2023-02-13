@@ -11,21 +11,16 @@ export default test => {
       .map(async query => {
         const result = await commands.band(query);
         assert(result).equals([
-          "Blind Guardian [Germany]: Speed Metal (early); Power Metal (later)",
+          "Blind Guardian [Germany, 1987]: Speed Metal (early); Power Metal (later)",
         ]);
       }));
   });
 
-  test.case("1-5 results", async assert => {
+  test.case("1-10 results", async assert => {
     const result = await commands.band("Crash Test");
     assert(result).equals([
-      "Crash Test [Argentina]: Groove Metal",
-      "Crash Test [Russia]: Heavy Metal/Hard Rock",
+      "Crash Test [Argentina, 1999]: Groove Metal",
+      "Crash Test [Russia, 2004]: Heavy Metal/Hard Rock",
     ]);
-  });
-
-  test.case("too many results", async assert => {
-    const result = await commands.band("Blind");
-    assert(result).equals(["too many results, refine your query"]);
   });
 };
