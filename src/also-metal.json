@@ -5,4 +5,10 @@
     "year": 2008,
     "genre": ["Metalcore", "Progressive Metal"]
   }
+  {
+    "name": "Korn",
+    "country": "USA",
+    "year": 1993,
+    "genre": ["Nu Metal", "Alternative Metal"]
+  }
 ]
