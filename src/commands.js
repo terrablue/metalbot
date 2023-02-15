@@ -1,4 +1,5 @@
 import {Path} from "runtime-compat/filesystem";
+import also_metal from "./also-metal.json" assert {type: "json"};
 
 const base = new Path("https://www.metal-archives.com/search");
 const uris = {
@@ -8,7 +9,7 @@ const uris = {
 const re = /<.*>(?<name>.*)<\/a>/gu;
 const maxTries = 10;
 
-const api = {
+const remote = {
   bands: async (query, tries = 0) => {
     if (tries > maxTries) {
       console.log("too many retries, exiting");
@@ -25,12 +26,26 @@ const api = {
   },
 };
 
+const local = {
+  bands: query => {
+    const aaData = also_metal.filter(({name}) => name === query).map(
+      ({name, country, year, genre}) =>
+      [`<a href="">${name}</a>`, genre.join("; "), country, year]
+    );
+    return {iTotalRecords: aaData.length, aaData};
+  }
+};
+
+const search = {
+  bands: async query => {
+    const results = (await remote.bands(query));
+    return results?.iTotalRecords === 0 ? local.bands(query): results;
+  }
+};
+
 export default {
   band: async query => {
-    const results = await api.bands(query);
-    if (results === null) {
-      return ["api error"];
-    }
+    const results = await search.bands(query);
 
     const {iTotalRecords, aaData} = results;
 
@@ -44,7 +59,7 @@ export default {
       return ["too many results, refine your query"];
     }
 
-    // 1-5 results
+    // 1-10 results
     return aaData
       .map(([info, genre, country, year]) => ({
         name: [...info.matchAll(re)][0].groups.name, genre, country, year
