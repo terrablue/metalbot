@@ -35,4 +35,9 @@ export default test => {
       "Jinjer [Ukraine, 2008]: Metalcore; Progressive Metal",
     ]);
   });
+
+  test.case("random", async assert => {
+    const band = await commands.random();
+    assert(/.*\[.*,.*\]:.*/u.test(band)).true();
+  });
 };

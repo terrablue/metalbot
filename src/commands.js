@@ -2,6 +2,7 @@ import {Path} from "runtime-compat/filesystem";
 import also_metal from "./also-metal.json" assert {type: "json"};
 
 const base = new Path("https://www.metal-archives.com/search");
+const randomURL = "https://www.metal-archives.com/band/random";
 const uris = {
   bands: query => base.join(`ajax-advanced/searching/bands/?exactBandMatch=1&bandName=${encodeURI(query)}`),
 };
@@ -44,6 +45,18 @@ const search = {
 };
 
 export default {
+  random: async query => {
+    const results = await (await fetch(randomURL)).text();
+    const nameRE = /<title>(?<name>.*) -/gu;
+    const countryRE = /lists\/.*">(?<country>.*)<\/a>/gu;
+    const yearRE = /Formed in:<\/dt>\n<dd>(?<year>.*)<\/dd>/gu;
+    const genreRE = /Genre:<\/dt>\n<dd>(?<genre>.*)<\/dd>/gu;
+    const {name} = [...results.matchAll(nameRE)][0].groups;
+    const {country} = [...results.matchAll(countryRE)][0].groups;
+    const {year} = [...results.matchAll(yearRE)][0].groups;
+    const {genre} = [...results.matchAll(genreRE)][0].groups;
+    return [`${name} [${country}, ${year}]: ${genre}`];
+  },
   band: async query => {
     const results = await search.bands(query);
 
