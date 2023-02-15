@@ -55,11 +55,11 @@ export default {
     }
 
     // too many results
-    if (iTotalRecords > 10) {
+    if (iTotalRecords > 20) {
       return ["too many results, refine your query"];
     }
 
-    // 1-10 results
+    // 1-20 results
     return aaData
       .map(([info, genre, country, year]) => ({
         name: [...info.matchAll(re)][0].groups.name, genre, country, year

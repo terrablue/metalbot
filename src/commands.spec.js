@@ -16,7 +16,7 @@ export default test => {
       }));
   });
 
-  test.case("remote: 1-10 results", async assert => {
+  test.case("remote: 1-20 results", async assert => {
     const result = await commands.band("Crash Test");
     assert(result).equals([
       "Crash Test [Argentina, 1999]: Groove Metal",
