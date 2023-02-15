@@ -29,11 +29,14 @@ export default test => {
     assert(result).equals(["no results"]);
   });
 
-  test.case("local: 1 result", async assert => {
-    const result = await commands.band("Jinjer");
-    assert(result).equals([
-      "Jinjer [Ukraine, 2008]: Metalcore; Progressive Metal",
-    ]);
+  test.case("local: different cases", async assert => {
+    await Promise.all(["Jinjer", "jinjer", "JINJER"]
+      .map(async query => {
+        const result = await commands.band(query);
+        assert(result).equals([
+          "Jinjer [Ukraine, 2008]: Metalcore; Progressive Metal",
+        ]);
+      }));
   });
 
   test.case("random", async assert => {

@@ -29,9 +29,10 @@ const remote = {
 
 const local = {
   bands: query => {
-    const aaData = also_metal.filter(({name}) => name === query).map(
-      ({name, country, year, genre}) =>
-      [`<a href="">${name}</a>`, genre.join("; "), country, year]
+    const aaData = also_metal.filter(({name}) => 
+      name.toLowerCase() === query.toLowerCase()).map(
+        ({name, country, year, genre}) =>
+          [`<a href="">${name}</a>`, genre.join("; "), country, year]
     );
     return {iTotalRecords: aaData.length, aaData};
   }
