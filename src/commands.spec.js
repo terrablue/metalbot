@@ -29,7 +29,7 @@ export default test => {
     assert(result).equals(["no results"]);
   });
 
-  test.case("local: result ", async assert => {
+  test.case("local: 1 result", async assert => {
     const result = await commands.band("Jinjer");
     assert(result).equals([
       "Jinjer [Ukraine, 2008]: Metalcore; Progressive Metal",
