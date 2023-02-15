@@ -9,4 +9,6 @@ Join `#metal` on `irc.libera.chat` to use it.
 
 Data is queried live, there is no caching at the moment.
 
-`!band <query>`
+`!band <query>` - shows data about a band using an exact query match
+
+`!random` - shows data about a random band
