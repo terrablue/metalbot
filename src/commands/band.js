@@ -1,7 +1,7 @@
-import {Path, File} from "runtime-compat/filesystem";
+import {Path} from "runtime-compat/filesystem";
 
-const db_file = new Path(import.meta.url).directory.join("../db/bands.json");
-const bands_db = JSON.parse(await File.read(db_file));
+const db = new Path(import.meta.url).directory.join("../db/bands.json").file;
+const bands = JSON.parse(await db.read());
 
 const base = new Path("https://www.metal-archives.com/search");
 const uris = {
@@ -32,7 +32,7 @@ const remote = {
 };
 
 const local = {
-  bands: query => bands_db.filter(({name}) =>
+  bands: query => bands.filter(({name}) =>
     name.toLowerCase() === query.toLowerCase()),
 };
 
@@ -41,28 +41,76 @@ const search = {
     const results = local.bands(query);
     return results.length === 0
       ? remote.bands(query)
-      : results.map(result => ({...result, genres: result.genres.join("; ")}));
+      : results.map(result => ({...result,
+        genres: result.genres?.join("; ") ?? ""}));
   },
 };
 
 const maxRecords = 20;
 
-export default async (prefix, query) => {
-  const results = await search.bands(query);
+const commands = {
+  "!": async query => {
+    const results = await search.bands(query);
 
-  const totals = results.length;
+    const totals = results.length;
 
-  // no results
-  if (totals === 0) {
-    return ["no results"];
-  }
+    // no results
+    if (totals === 0) {
+      return ["no results"];
+    }
 
-  // too many results
-  if (totals > maxRecords) {
-    return ["too many results, refine your query"];
-  }
+    // too many results
+    if (totals > maxRecords) {
+      return ["too many results, refine your query"];
+    }
 
-  // 1-20 results
-  return results.map(({name, genres, country, year}) =>
-    `${name} [${country}, ${year}]: ${genres}`);
+    // 1-20 results
+    return results.map(({name, genres, country, year}) =>
+      `${name} [${country}, ${year}]: ${genres}`);
+  },
+  "+": async update => {
+    const allowedKeys = ["name", "country", "year", "genres"];
+    const operations = update.split(",").map(o => o.trim().split("="));
+
+    const invalidKey = operations.find(([key]) => !allowedKeys.includes(key));
+    if (invalidKey !== undefined) {
+      return [`invalid key: ${invalidKey[0]}`];
+    }
+
+    const {name, country, year, genres} = Object.fromEntries(operations);
+
+    if (name === undefined) {
+      return ["must specify name (name=<band name>)"];
+    }
+
+    const band = local.bands(name)?.[0] ?? {name, insert: true};
+
+    if (country !== undefined) {
+      band.country = country;
+    }
+    if (year !== undefined) {
+      if (!/^\d{4}$/u.test(year)) {
+        return ["year must be in the format YYYY"];
+      }
+      band.year = Number(year);
+    }
+    if (genres !== undefined) {
+      if (!/^(?:[a-zA-Z ]+;?)+$/u.test(genres)) {
+        return ["genres must be in the format `Genre 1 (; Genre 2)`"];
+      }
+      band.genres = genres.split(";");
+    }
+
+    if (band.insert) {
+      const {insert, ...newBand} = band;
+      bands.push(newBand);
+    }
+
+    await db.write(JSON.stringify(bands));
+
+    return ["database updated"];
+  },
 };
+
+export default (prefix, query) =>
+  commands[prefix]?.(query) ?? [`prefix "${prefix}" not supported`];
