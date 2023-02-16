@@ -15,10 +15,13 @@ const remote = {
   bands: async (query, tries = 0) => {
     if (tries > maxTries) {
       console.log("too many retries, exiting");
-      return null;
+      return [];
     }
     try {
-      return await (await fetch(uris.bands(query))).json();
+      const {aaData: results} = await (await fetch(uris.bands(query))).json();
+      return results.map(([info, genres, country, year]) => ({
+        name: [...info.matchAll(re)][0].groups.name, genres, country, year,
+     }));
     } catch (error) {
       console.log("fetch error, retrying");
       console.log(error);
@@ -29,20 +32,16 @@ const remote = {
 };
 
 const local = {
-  bands: query => {
-    const aaData = bands_db.filter(({name}) =>
-      name.toLowerCase() === query.toLowerCase()).map(
-      ({name, country, year, genre}) =>
-        [`<a href="">${name}</a>`, genre.join("; "), country, year]
-    );
-    return {iTotalRecords: aaData.length, aaData};
-  },
+  bands: query => bands_db.filter(({name}) =>
+    name.toLowerCase() === query.toLowerCase()),
 };
 
 const search = {
   bands: async query => {
-    const results = await remote.bands(query);
-    return results?.iTotalRecords === 0 ? local.bands(query) : results;
+    const results = local.bands(query);
+    return results.length === 0
+      ? remote.bands(query)
+      : results.map(result => ({...result, genres: result.genres.join("; ")}));
   },
 };
 
@@ -51,23 +50,19 @@ const maxRecords = 20;
 export default async (prefix, query) => {
   const results = await search.bands(query);
 
-  const {iTotalRecords, aaData} = results;
+  const totals = results.length;
 
   // no results
-  if (iTotalRecords === 0) {
+  if (totals === 0) {
     return ["no results"];
   }
 
   // too many results
-  if (iTotalRecords > maxRecords) {
+  if (totals > maxRecords) {
     return ["too many results, refine your query"];
   }
-  
+
   // 1-20 results
-  return aaData
-    .map(([info, genre, country, year]) => ({
-      name: [...info.matchAll(re)][0].groups.name, genre, country, year,
-    }))
-    .map(({name, genre, country, year}) =>
-      `${name} [${country}, ${year}]: ${genre}`);
+  return results.map(({name, genres, country, year}) =>
+    `${name} [${country}, ${year}]: ${genres}`);
 };
