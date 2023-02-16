@@ -95,7 +95,8 @@ const commands = {
       band.year = Number(year);
     }
     if (genres !== undefined) {
-      if (!/^(?:[a-zA-Z ]+;?)+$/u.test(genres)) {
+      const genreArray = genres.split(";")
+      if (genreArray.some(genre => !/^[a-zA-z ]+$/u.test(genre))) {
         return ["genres must be in the format `Genre 1 (; Genre 2)`"];
       }
       band.genres = genres.split(";");
