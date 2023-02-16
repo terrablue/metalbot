@@ -42,7 +42,7 @@ const search = {
     return results.length === 0
       ? remote.bands(query)
       : results.map(result => ({...result,
-        genres: result.genres?.join("; ") ?? ""}));
+        genres: result.genres?.map(g => g.trim()).join("; ") ?? ""}));
   },
 };
 
