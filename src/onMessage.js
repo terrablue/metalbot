@@ -1,0 +1,28 @@
+import {is} from "runtime-compat/dyndef";
+import * as commands from "./commands/exports.js";
+
+const commandRE = /(?<prefix>[!+])(?<name>.*?) (?<params>.*)/gu;
+const commandNames = Object.keys(commands);
+const eq = right => left => left === right;
+
+export default async (to, message) => {
+  is(to).string();
+  is(message).string();
+
+  const match = [...message.matchAll(commandRE)]?.[0]?.groups;
+
+  // invalid message
+  if (match === undefined) {
+    throw new Error(`invalid message: ${message}`);
+  }
+
+  const {prefix, name, params} = match;
+
+  // invalid command
+  if (!commandNames.some(eq(name))) {
+    throw new Error(`invalid command: ${name}`);
+  }
+
+  const result = await commands[name](prefix, params);
+  return say => result.forEach(line => say(to, line));
+};
