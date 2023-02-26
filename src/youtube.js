@@ -10,7 +10,7 @@ const getURL = id =>
   `${base}?part=id%2C+snippet&id=${id}&key=${process.env.YOUTUBE}`;
 
 export default async (message, channel, c) => {
-  const id = getId(message.split("?")[0]);
+  const id = getId(message.split("?list=")[0]);
   if (id) {
     const [idWithoutTime] = id.split("?t=");
 
