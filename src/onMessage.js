@@ -1,5 +1,6 @@
 import {is} from "runtime-compat/dyndef";
 import * as commands from "./commands/exports.js";
+import youtube from "./youtube.js";
 
 const commandRE = /(?<prefix>[!+])(?<name>.*?) (?<params>.*)/gu;
 const commandNames = Object.keys(commands);
@@ -8,6 +9,11 @@ const eq = right => left => left === right;
 export default async (to, message) => {
   is(to).string();
   is(message).string();
+
+  const yt = await youtube(message);
+  if (yt) {
+    return say => say(to, yt);
+  }
 
   const match = [...message.matchAll(commandRE)]?.[0]?.groups;
 

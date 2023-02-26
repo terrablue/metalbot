@@ -20,6 +20,6 @@ client.addListener("message", async (from, to, message) => {
   try {
     (await onMessage(to, message))((...args) => client.say(...args));
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 });
