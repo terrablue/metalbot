@@ -5,7 +5,7 @@ const bands = JSON.parse(await db.read());
 
 const base = new Path("https://www.metal-archives.com/search");
 const uris = {
-  bands: query => base.join(`ajax-advanced/searching/bands/?exactBandMatch=1&bandName=${encodeURI(query)}`),
+  bands: query => base.join(`ajax-advanced/searching/bands/?exactBandMatch=1&bandName=${(query)}`),
 };
 
 const re = /<.*>(?<name>.*)<\/a>/gu;
@@ -18,7 +18,7 @@ const remote = {
       return [];
     }
     try {
-      const {aaData: results} = await (await fetch(uris.bands(query))).json();
+      const {aaData: results} = await (await fetch(uris.bands(encodeURIComponent(query)))).json();
       return results.map(([info, genres, country, year]) => ({
         name: [...info.matchAll(re)][0].groups.name, genres, country, year,
      }));

@@ -23,6 +23,13 @@ export default test => {
       }));
   });
 
+  test.case("special characters", async assert => {
+    const result = await get("Demons & Wizards");
+    assert(result).equals([
+      "Demons & Wizards [United States, 1997]: Power Metal",
+    ]);
+  });
+
   test.case("get remote: 1-20 results", async assert => {
     const result = await get("Crash Test");
     assert(result).equals([
