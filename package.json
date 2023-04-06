@@ -1,11 +1,10 @@
 {
   "name": "metalbot",
   "version": "0.1.0",
-  "author": "Terrablue <terrablue@proton.me>",
-  "bugs": "https://github.com/terrablue/metalbot/issues",
-  "repository": "https://github.com/terrablue/metalbot",
   "description": "Metal music bot",
+  "bugs": "https://github.com/terrablue/metalbot/issues",
   "license": "MIT",
+  "repository": "https://github.com/terrablue/metalbot",
   "type": "module",
   "scripts": {
     "start": "node src/bot.js"
@@ -13,10 +12,10 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "irc-upd": "^0.11.0",
-    "runtime-compat": "^0.12.3"
+    "runtime-compat": "^0.14.1"
   },
   "devDependencies": {
     "debris": "^0.9.1",
-    "eslint": "^8.34.0"
+    "maximin": "^0.1.2"
   }
 }
