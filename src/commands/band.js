@@ -1,11 +1,11 @@
-import {Path} from "runtime-compat/filesystem";
+import {Path} from "runtime-compat/fs";
 
-const db = new Path(import.meta.url).directory.join("../db/bands.json").file;
-const bands = JSON.parse(await db.read());
+const db = new Path(import.meta.url).up(2).join("db", "bands.json");
+const bands = await db.json();
 
 const base = new Path("https://www.metal-archives.com/search");
 const uris = {
-  bands: query => base.join(`ajax-advanced/searching/bands/?exactBandMatch=1&bandName=${(query)}`),
+  bands: query => base.join(`ajax-advanced/searching/bands/?exactBandMatch=1&bandName=${query}`),
 };
 
 const re = /<.*>(?<name>.*)<\/a>/gu;
@@ -103,7 +103,7 @@ const commands = {
     }
 
     if (band.insert) {
-      const {insert, ...newBand} = band;
+      const {insert: _, ...newBand} = band;
       bands.push(newBand);
     }
 

@@ -12,10 +12,10 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "irc-upd": "^0.11.0",
-    "runtime-compat": "^0.16.3"
+    "runtime-compat": "^0.18.0"
   },
   "devDependencies": {
-    "debris": "^0.9.1",
+    "debris": "^0.13.0",
     "maximin": "^0.1.2"
   }
 }
