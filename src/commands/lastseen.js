@@ -1,8 +1,8 @@
 import {Path} from "runtime-compat/fs";
-const users = await new Path(import.meta.url).up(2).join("db", "users.json")
-  .json();
 
-export default (_, nick) => {
+export default async (_, nick) => {
+  const users = await new Path(import.meta.url).up(2).join("db", "users.json")
+    .json();
   if (users[nick] !== undefined) {
     const user = users[nick];
     const join = user.join ?? "unknown";
