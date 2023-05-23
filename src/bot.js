@@ -41,11 +41,11 @@ const record = {
 };
 
 client.addListener("join", (_, nick) => {
-  record.join(nick);
+  record.join(nick.toLowerCase());
 });
 
 client.addListener("quit", nick => {
-  record.quit(nick);
+  record.quit(nick.toLowerCase());
 });
 
 
@@ -55,7 +55,7 @@ client.addListener("message", async (from, to, message) => {
     return;
   }
 
-  record.message(from);
+  record.message(from.toLowerCase());
 
   try {
     (await onMessage(to, message))((...args) => client.say(...args));
