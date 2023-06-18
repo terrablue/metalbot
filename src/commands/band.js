@@ -107,7 +107,7 @@ const commands = {
       bands.push(newBand);
     }
 
-    await db.write(JSON.stringify(bands));
+    await db.file.write(JSON.stringify(bands));
 
     return ["database updated"];
   },
