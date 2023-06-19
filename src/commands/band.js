@@ -42,11 +42,15 @@ const search = {
     return results.length === 0
       ? remote.bands(query)
       : results.map(result => ({...result,
-        genres: result.genres?.map(g => g.trim()).join("; ") ?? ""}));
+        genres: result.genres?.map(g => g.trim()).join("; ") ?? "",
+        source: "local",
+      }));
   },
 };
 
 const maxRecords = 20;
+
+const instruction = `+band name=<name>, year=<year>, country=<country>, genres=<genre1>;<genre2>`;
 
 const commands = {
   "!": async query => {
@@ -56,7 +60,7 @@ const commands = {
 
     // no results
     if (totals === 0) {
-      return ["no results"];
+      return [`no results | add with ${instruction}`];
     }
 
     // too many results
@@ -65,8 +69,8 @@ const commands = {
     }
 
     // 1-20 results
-    return results.map(({name, genres, country, year}) =>
-      `${name} [${country}, ${year}]: ${genres}`);
+    return results.map(({name, genres, country, year, source}) =>
+      `${name} [${country}, ${year}]: ${genres} [${source ?? "MA"}]`);
   },
   "+": async update => {
     const allowedKeys = ["name", "country", "year", "genres"];
