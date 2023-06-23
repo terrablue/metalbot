@@ -20,7 +20,7 @@ export default async (_, _2, {to, from, client}) => {
     .json();
   const present = await getNames(client, to);
   const presentlc = present.map(p => p.toLowerCase());
-  const senders = [bot, from];
+  const senders = [bot, from].map(p => p.toLowerCase());
   const names = transform(users, entry => entry
     // exclude users not in channel and the bot
     .filter(([name]) => presentlc.includes(name) && !senders.includes(name))
