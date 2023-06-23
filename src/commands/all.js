@@ -27,9 +27,11 @@ export default async (_, _2, {to, from, client}) => {
     // exclude users who have never spoken
     .filter(([, data]) => data.message !== undefined)
     // map key to names, value to dates
-    .map(([user, data]) =>
-      [presentlc.find(p => p === user), new Date(data.message).getTime()])
-    .toSorted(([, a], [, b]) => Math.sign(b > a))
+    .map(([user, data]) => [
+      present.find(p => p.toLowerCase() === user),
+      new Date(data.message).getTime(),
+    ])
+    .toSorted(([, a], [, b]) => Math.sign(b - a))
     .filter((_, i) => i < limit));
 
   return [`${Object.keys(names).join(", ")}`];
