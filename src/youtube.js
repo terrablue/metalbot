@@ -1,3 +1,5 @@
+import env from "runtime-compat/env";
+
 const getId = message => {
   const regexp =
     /((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu\.be))(\/(?:[\w\-]+\?v=|embed|shorts\/|v\/)?)(?<id>([\w\-]+)(\S+)?)/g;
@@ -6,8 +8,7 @@ const getId = message => {
 
 const base = "https://www.googleapis.com/youtube/v3/videos";
 
-const getURL = id =>
-  `${base}?part=id%2C+snippet&id=${id}&key=${process.env.YOUTUBE}`;
+const getURL = id => `${base}?part=id%2C+snippet&id=${id}&key=${env.YOUTUBE}`;
 
 export default async (message, channel, c) => {
   const id = getId(message.split("?list=")[0]);

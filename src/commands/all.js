@@ -34,5 +34,5 @@ export default async (_, _2, {to, from, client}) => {
     .toSorted(([, a], [, b]) => Math.sign(b - a))
     .filter((_, i) => i < limit));
 
-  return [`${Object.keys(names).join(", ")}`];
+  return [`^ ${Object.keys(names).join(", ")}`];
 };
