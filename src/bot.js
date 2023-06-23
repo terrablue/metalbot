@@ -10,6 +10,7 @@ const client = new irc.Client(network, user, {
   channels: channels.split(";"),
   password,
 });
+const space = 2;
 
 const record = {
   users: await users.json() ?? {},
@@ -19,7 +20,7 @@ const record = {
     }
   },
   async save() {
-    await users.file.write(JSON.stringify(this.users));
+    await users.file.write(JSON.stringify(this.users, null, space));
   },
   quit(nick) {
     this.create(nick);
@@ -39,11 +40,11 @@ const record = {
 };
 
 client.addListener("join", (_, nick) => {
-  record.join(nick.toLowerCase());
+  record.join(nick);
 });
 
 client.addListener("quit", nick => {
-  record.quit(nick.toLowerCase());
+  record.quit(nick);
 });
 
 client.addListener("message", async (from, to, message) => {
@@ -52,7 +53,7 @@ client.addListener("message", async (from, to, message) => {
     return;
   }
 
-  record.message(from.toLowerCase());
+  record.message(from);
 
   try {
     (await onMessage(to, message, {client, from}))((...args) =>
