@@ -2,11 +2,11 @@ import {is} from "runtime-compat/dyndef";
 import * as commands from "./commands/exports.js";
 import youtube from "./youtube.js";
 
-const commandRE = /(?<prefix>[!+])(?<name>.*?) (?<params>.*)/gu;
+const commandRE = /^(?<prefix>[!+])(?<name>.*?) (?<params>.*)/gu;
 const commandNames = Object.keys(commands);
 const eq = right => left => left === right;
 
-export default async (to, message) => {
+export default async (to, message, more) => {
   is(to).string();
   is(message).string();
 
@@ -15,7 +15,7 @@ export default async (to, message) => {
     return say => say(to, yt);
   }
 
-  const match = [...message.matchAll(commandRE)]?.[0]?.groups;
+  const match = [...message.trim().matchAll(commandRE)]?.[0]?.groups;
 
   // invalid message
   if (match === undefined) {
@@ -29,6 +29,6 @@ export default async (to, message) => {
     throw new Error(`invalid command: ${name}`);
   }
 
-  const result = await commands[name](prefix, params);
+  const result = await commands[name](prefix, params, {to, ...more});
   return say => result.forEach(line => say(to, line));
 };

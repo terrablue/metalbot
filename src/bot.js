@@ -1,11 +1,9 @@
 import {Path} from "runtime-compat/fs";
 import irc from "irc-upd";
-import {config} from "dotenv";
+import env from "runtime-compat/env";
 import onMessage from "./onMessage.js";
 
-config();
-
-const {network, user, channels, password} = process.env;
+const {network, user, channels, password} = env;
 const users = new Path(import.meta.url).up(1).join("db", "users.json");
 
 const client = new irc.Client(network, user, {
@@ -48,7 +46,6 @@ client.addListener("quit", nick => {
   record.quit(nick.toLowerCase());
 });
 
-
 client.addListener("message", async (from, to, message) => {
   // only react if in channel
   if (!channels.includes(to)) {
@@ -58,7 +55,8 @@ client.addListener("message", async (from, to, message) => {
   record.message(from.toLowerCase());
 
   try {
-    (await onMessage(to, message))((...args) => client.say(...args));
+    (await onMessage(to, message, {client, from}))((...args) =>
+      client.say(...args));
   } catch (error) {
     //console.log(error);
   }
