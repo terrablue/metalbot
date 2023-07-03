@@ -15,7 +15,7 @@ export default async (message, channel, c) => {
   if (id) {
     const [idWithoutTime] = id.split("?t=");
 
-    return await fetch(getURL(idWithoutTime), {
+    return fetch(getURL(idWithoutTime), {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -25,7 +25,7 @@ export default async (message, channel, c) => {
       .then(res => {
         const title = res.items[0]?.snippet?.title;
         if (title) {
-          return `YouTube Title: ${title}`;
+          return `\x0304,01►\x03 \x0314,01YouTube\x03 :: ${title}`;
         }
         return undefined;
       });
