@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "irc-upd": "^0.11.0",
-    "runtime-compat": "^0.21.0"
+    "runtime-compat": "^0.26.2"
   },
   "devDependencies": {
-    "debris": "^0.13.0",
-    "maximin": "^0.1.4"
+    "debris": "^0.13.1",
+    "maximin": "^0.1.7"
   }
 }
