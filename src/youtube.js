@@ -2,7 +2,7 @@ import env from "runtime-compat/env";
 
 const getId = message => {
   const regexp =
-    /((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu\.be))(\/(?:[\w\-]+\?v=|embed|shorts\/|v\/)?)(?<id>([\w\-]+)(\S+)?)/g;
+    /(?:(?:https?:)?\/\/)?(?:(?:www|m)\.)?(?:(?:youtube\.com|youtu.be))(?:\/(?:[\w-]+\?v=|embed\/|shorts\/|live\/|v\/)?)(?<id>[\w-]+)/gu;
   return regexp.exec(message)?.groups?.id;
 };
 
