@@ -1,7 +1,7 @@
 import {Path} from "runtime-compat/fs";
 import irc from "irc-upd";
 import env from "runtime-compat/env";
-import onMessage from "./onMessage.js";
+import on_message from "./on-message.js";
 
 const {network, user, channels, password} = env;
 const users = new Path(import.meta.url).up(1).join("db", "users.json");
@@ -56,7 +56,7 @@ client.addListener("message", async (from, to, message) => {
   record.message(from);
 
   try {
-    (await onMessage(to, message, {client, from}))((...args) =>
+    (await on_message(to, message, {client, from}))((...args) =>
       client.say(...args));
   } catch (error) {
     //console.log(error);
