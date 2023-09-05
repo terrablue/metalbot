@@ -19,6 +19,11 @@ export default async (to, message, more) => {
     return say => say(to, `Olá ${more.from}! ¿Cómo estás?`);
   }
 
+  if (message.split(" ").some(part => ["bye", "goodbye"]
+    .includes(part.toLowerCase()))) {
+    return say => say(to, `Shalom ${more.from}!`);
+  }
+
   const match = [...message.trim().matchAll(command_re)]?.[0]?.groups;
 
   // invalid message
