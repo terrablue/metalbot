@@ -15,13 +15,16 @@ export default async (to, message, more) => {
     return say => say(to, yt);
   }
 
-  if (message.includes("metalbot")) {
-    return say => say(to, `Olá ${more.from}! ¿Cómo estás?`);
+  if (["hello", "hi", "hullo"].includes(message.toLowerCase().trim())) {
+    return say => say(to, `Hi ${more.from}!`);
   }
 
-  if (message.split(" ").some(part => ["bye", "goodbye"]
-    .includes(part.toLowerCase()))) {
+  if (["bye", "goodbye"].includes(message.toLowerCase().trim())) {
     return say => say(to, `Shalom ${more.from}!`);
+  }
+
+  if (message.includes("metalbot")) {
+    return say => say(to, `Olá ${more.from}! ¿Cómo estás?`);
   }
 
   const match = [...message.trim().matchAll(command_re)]?.[0]?.groups;
