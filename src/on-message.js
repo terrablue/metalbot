@@ -15,11 +15,11 @@ export default async (to, message, more) => {
     return say => say(to, yt);
   }
 
-  if (["hello", "hi", "hullo"].includes(message.toLowerCase().trim())) {
+  if (["hello", "hi", "hullo", "hola"].includes(message.toLowerCase().trim())) {
     return say => say(to, `Hi ${more.from}!`);
   }
 
-  if (["bye", "goodbye"].includes(message.toLowerCase().trim())) {
+  if (["bye", "goodbye", "adiós"].includes(message.toLowerCase().trim())) {
     return say => say(to, `Shalom ${more.from}!`);
   }
 
