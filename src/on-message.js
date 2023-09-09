@@ -23,7 +23,7 @@ export default async (to, message, more) => {
     return say => say(to, `Shalom ${more.from}!`);
   }
 
-  if (message.includes("metalbot")) {
+  if (message.split(" ").some(word => word.toLowerCase() === "metalbot")) {
     return say => say(to, `Olá ${more.from}! ¿Cómo estás?`);
   }
 
