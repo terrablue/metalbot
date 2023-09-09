@@ -2,7 +2,7 @@ import {is} from "runtime-compat/dyndef";
 import * as commands from "./commands/exports.js";
 import youtube from "./youtube.js";
 
-const command_re = /^(?<prefix>[!+])(?<name>[^ ]*) ?(?<params>.*)/gu
+const command_re = /^(?<prefix>[!+])(?<name>[^ ]*) ?(?<params>.*)/gu;
 const command_names = Object.keys(commands);
 const eq = right => left => left === right;
 
