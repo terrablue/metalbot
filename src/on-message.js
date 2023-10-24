@@ -1,10 +1,15 @@
 import {is} from "runtime-compat/dyndef";
+import {Path} from "runtime-compat/fs";
 import * as commands from "./commands/exports.js";
 import youtube from "./youtube.js";
+import {user_langs} from "./commands/lang.js";
 
 const command_re = /^(?<prefix>[!+])(?<name>[^ ]*) ?(?<params>.*)/gu;
 const command_names = Object.keys(commands);
 const eq = right => left => left === right;
+
+const languages = await new Path(import.meta.url).up(1)
+  .join("db", "languages.json").file.json();
 
 export default async (to, message, more) => {
   is(to).string();
@@ -15,8 +20,10 @@ export default async (to, message, more) => {
     return say => say(to, yt);
   }
 
+  const language = languages[user_langs[more.from] ?? "en"];
+
   if (["hello", "hi", "hullo", "hola"].includes(message.toLowerCase().trim())) {
-    return say => say(to, `Hi ${more.from}!`);
+    return say => say(to, `${language} ${more.from}!`);
   }
 
   if (["bye", "goodbye", "adiós"].includes(message.toLowerCase().trim())) {
