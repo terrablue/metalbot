@@ -1,7 +1,16 @@
 {
-  "en": "Hi",
-  "de": "Hallo",
-  "es": "Hola",
-  "pt": "Olá",
-  "he": "שלום"
+  "hi": {
+    "en": "Hi",
+    "de": "Hallo",
+    "es": "Hola",
+    "pt": "Olá",
+    "he": "שלום"
+  },
+  "bye": {
+    "en": "Bye",
+    "de": "Tschüss",
+    "es": "Adiós",
+    "pt": "Tchau",
+    "he": "שלום"
+  }
 }

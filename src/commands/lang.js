@@ -6,7 +6,7 @@ const user_langs_file = new Path(import.meta.url).up(2)
   .join("db", "users_languages.json").file;
 const user_langs = await user_langs_file.json();
 const set = "To a set a language, write !lang [language]";
-const options = `Options are: ${ Object.keys(languages).join(" ")}`;
+const options = `Options are: ${ Object.keys(languages.hi).join(" ")}`;
 const follow = [set, options];
 
 export default async (_, language, {from}) => {
@@ -19,7 +19,7 @@ export default async (_, language, {from}) => {
     return [`Your language is \x0300,01${user_langs[$from]}\x03`, ... follow];
   }
   const $language = language.trim().toLowerCase();
-  if (languages[$language] !== undefined) {
+  if (languages.hi[$language] !== undefined) {
     user_langs[from] = $language;
     await user_langs_file.write(JSON.stringify(user_langs));
     return [`setting language to ${language}`];

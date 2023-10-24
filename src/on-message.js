@@ -20,14 +20,15 @@ export default async (to, message, more) => {
     return say => say(to, yt);
   }
 
-  const language = languages[user_langs[more.from] ?? "en"];
 
   if (["hello", "hi", "hullo", "hola"].includes(message.toLowerCase().trim())) {
+    const language = languages.hi[user_langs[more.from] ?? "en"];
     return say => say(to, `${language} ${more.from}!`);
   }
 
   if (["bye", "goodbye", "adiós"].includes(message.toLowerCase().trim())) {
-    return say => say(to, `Shalom ${more.from}!`);
+    const language = languages.bye[user_langs[more.from] ?? "en"];
+    return say => say(to, `${language} ${more.from}!`);
   }
 
   if (message.split(" ").some(word => word.toLowerCase() === "metalbot")) {
