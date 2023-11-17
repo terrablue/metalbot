@@ -20,7 +20,6 @@ export default async (to, message, more) => {
     return say => say(to, yt);
   }
 
-
   if (["hello", "hi", "hullo", "hola"].includes(message.toLowerCase().trim())) {
     const language = languages.hi[user_langs[more.from] ?? "en"];
     return say => say(to, `${language} ${more.from}!`);
@@ -29,6 +28,11 @@ export default async (to, message, more) => {
   if (["bye", "goodbye", "adiós"].includes(message.toLowerCase().trim())) {
     const language = languages.bye[user_langs[more.from] ?? "en"];
     return say => say(to, `${language} ${more.from}!`);
+  }
+
+  const lowercase = message.toLowerCase();
+  if (lowercase.includes("metalbot") && lowercase.includes("love")) {
+    return say => say(to, "<3");
   }
 
   if (message.split(" ").some(word => word.toLowerCase() === "metalbot")) {
