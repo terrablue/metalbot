@@ -11,6 +11,22 @@ const eq = right => left => left === right;
 const languages = await new Path(import.meta.url).up(1)
   .join("db", "languages.json").file.json();
 
+const his = [
+  "hello",
+  "hi",
+  "hullo",
+  "hola",
+  "היי",
+  "שלום",
+];
+
+const byes = [
+  "bye",
+  "goodbye",
+  "adiós",
+  "ביי",
+];
+
 export default async (to, message, more) => {
   is(to).string();
   is(message).string();
@@ -20,12 +36,12 @@ export default async (to, message, more) => {
     return say => say(to, yt);
   }
 
-  if (["hello", "hi", "hullo", "hola"].includes(message.toLowerCase().trim())) {
+  if (his.includes(message.toLowerCase().trim())) {
     const language = languages.hi[user_langs[more.from] ?? "en"];
     return say => say(to, `${language} ${more.from}!`);
   }
 
-  if (["bye", "goodbye", "adiós"].includes(message.toLowerCase().trim())) {
+  if (byes.includes(message.toLowerCase().trim())) {
     const language = languages.bye[user_langs[more.from] ?? "en"];
     return say => say(to, `${language} ${more.from}!`);
   }
