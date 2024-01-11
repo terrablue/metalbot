@@ -23,9 +23,10 @@ export default async (message, channel, c) => {
     })
       .then(r => r.json())
       .then(res => {
-        const title = res.items[0]?.snippet?.title;
-        if (title) {
-          return `\x0304,01►\x03 \x0314,01YouTube\x03 :: ${title}`;
+        const [item] = res.items;
+        if (item) {
+          const {title, channelTitle} = item.snippet;
+          return `\x0304,01►\x03 \x0314,01YouTube\x03 :: ${title} | ${channelTitle}`;
         }
         return undefined;
       });
