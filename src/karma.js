@@ -40,21 +40,25 @@ export default async (message, channel, more) => {
     if (karma !== null) {
         const karmaDb = readDb();
         let karmaValue = karmaDb[karma.frame] || 0;
-        if(karma.frame === from) {
+        let responses=[];
+        if(karma.frame === from && karma.pattern === "++") {
             // you can't inc your own karma, person.
             karma.pattern='--';
+            responses.push(`You can't add to your own karma, $from.`)
         }
         switch (karma.pattern) {
             case '--':
                 karmaValue--;
                 karmaDb[karma.frame] = karmaValue;
                 writeDb(karmaDb);
-                return `${karma.frame} has a karma level of ${karmaValue}`
+                responses.push(`${karma.frame} has a karma level of ${karmaValue}`);
+                    return responses;
             case '++':
                 karmaValue++;
                 karmaDb[karma.frame] = karmaValue;
                 writeDb(karmaDb);
-                return `${karma.frame} has a karma level of ${karmaValue}`
+                responses.push(`${karma.frame} has a karma level of ${karmaValue}`);
+                return responses;
             default:
                 break; // what?
         }
