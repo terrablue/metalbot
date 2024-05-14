@@ -1,6 +1,5 @@
 {
   "name": "metalbot",
-  "version": "0.1.0",
   "description": "Metal music bot",
   "bugs": "https://github.com/terrablue/metalbot/issues",
   "license": "MIT",
@@ -12,11 +11,10 @@
   "dependencies": {
     "irc-upd": "^0.11.0",
     "openai": "^4.11.1",
-    "rcompat": "^0.11.1",
-    "runtime-compat": "^0.26.2"
+    "rcompat": "^0.11.1"
   },
   "devDependencies": {
-    "debris": "^0.13.1",
-    "maximin": "^0.1.7"
+    "debris": "^0.14.0",
+    "maximin": "^0.2.2"
   }
 }

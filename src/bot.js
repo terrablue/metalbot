@@ -1,10 +1,10 @@
-import {Path} from "runtime-compat/fs";
+import FS from "rcompat/fs";
+import env from "rcompat/env";
 import irc from "irc-upd";
-import env from "runtime-compat/env";
 import on_message from "./on-message.js";
 
-const {network, user, channels, password} = env;
-const users = new Path(import.meta.url).up(1).join("db", "users.json");
+const { network, user, channels, password } = env;
+const users = new FS.File(import.meta.url).up(1).join("db", "users.json");
 
 const client = new irc.Client(network, user, {
   channels: channels.split(";"),
@@ -20,7 +20,7 @@ const record = {
     }
   },
   async save() {
-    await users.file.write(JSON.stringify(this.users, null, space));
+    await users.write(JSON.stringify(this.users, null, space));
   },
   quit(nick) {
     this.create(nick);
@@ -56,9 +56,9 @@ client.addListener("message", async (from, to, message) => {
   record.message(from);
 
   try {
-    (await on_message(to, message, {client, from}))((...args) =>
+    (await on_message(to, message, { client, from }))((...args) =>
       client.say(...args));
   } catch (error) {
-    //console.log(error);
+    // console.log(error);
   }
 });

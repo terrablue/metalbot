@@ -1,9 +1,9 @@
-import {Path} from "runtime-compat/fs";
+import FS from "rcompat/fs";
 
-const db = new Path(import.meta.url).up(2).join("db", "bands.json");
+const db = new FS.File(import.meta.url).up(2).join("db", "bands.json");
 const bands = await db.json();
 
-const base = new Path("https://www.metal-archives.com/search");
+const base = new FS.File("https://www.metal-archives.com/search");
 const uris = {
   bands: query => base.join(`ajax-advanced/searching/bands/?exactBandMatch=1&bandName=${query}`),
 };
@@ -18,7 +18,7 @@ const remote = {
       return [];
     }
     try {
-      const {aaData: results} = await (await fetch(uris.bands(encodeURIComponent(query)))).json();
+      const { aaData: results } = await (await fetch(uris.bands(encodeURIComponent(query)))).json();
       return results.map(([info, genres, country, year]) => ({
         name: [...info.matchAll(re)][0].groups.name, genres, country, year,
      }));
@@ -32,7 +32,7 @@ const remote = {
 };
 
 const local = {
-  bands: query => bands.filter(({name}) =>
+  bands: query => bands.filter(({ name }) =>
     name.toLowerCase() === query.toLowerCase()),
 };
 
@@ -41,7 +41,7 @@ const search = {
     const results = local.bands(query);
     return results.length === 0
       ? remote.bands(query)
-      : results.map(result => ({...result,
+      : results.map(result => ({ ...result,
         genres: result.genres?.map(g => g.trim()).join("; ") ?? "",
         source: "local",
       }));
@@ -50,7 +50,7 @@ const search = {
 
 const maxRecords = 20;
 
-const instruction = `+band name=<name>, year=<year>, country=<country>, genres=<genre1>;<genre2>`;
+const instruction = "+band name=<name>, year=<year>, country=<country>, genres=<genre1>;<genre2>";
 
 const commands = {
   "!": async query => {
@@ -69,7 +69,7 @@ const commands = {
     }
 
     // 1-20 results
-    return results.map(({name, genres, country, year, source}) =>
+    return results.map(({ name, genres, country, year, source }) =>
       `${name} [${country}, ${year}]: ${genres} [${source ?? "MA"}]`);
   },
   "+": async update => {
@@ -81,13 +81,13 @@ const commands = {
       return [`invalid key: ${invalidKey[0]}`];
     }
 
-    const {name, country, year, genres} = Object.fromEntries(operations);
+    const { name, country, year, genres } = Object.fromEntries(operations);
 
     if (name === undefined) {
       return ["must specify name (name=<band name>)"];
     }
 
-    const band = local.bands(name)?.[0] ?? {name, insert: true};
+    const band = local.bands(name)?.[0] ?? { name, insert: true };
 
     if (country !== undefined) {
       band.country = country;
@@ -99,7 +99,7 @@ const commands = {
       band.year = Number(year);
     }
     if (genres !== undefined) {
-      const genreArray = genres.split(";")
+      const genreArray = genres.split(";");
       if (genreArray.some(genre => !/^[a-zA-Z- ()]+$/u.test(genre))) {
         return ["genres must be in the format `Genre 1 (; Genre 2)`"];
       }
@@ -107,11 +107,11 @@ const commands = {
     }
 
     if (band.insert) {
-      const {insert: _, ...newBand} = band;
+      const { insert: _, ...newBand } = band;
       bands.push(newBand);
     }
 
-    await db.file.write(JSON.stringify(bands));
+    await db.write(JSON.stringify(bands));
 
     return ["database updated"];
   },

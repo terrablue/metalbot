@@ -1,11 +1,11 @@
-import {Path} from "runtime-compat/fs";
-import {keymap} from "runtime-compat/object";
+import FS from "rcompat/fs";
+import O from "rcompat/object";
 
 export default async (_, nick) => {
-  const users = await new Path(import.meta.url).up(2).join("db", "users.json")
+  const users = await new FS.File(import.meta.url).up(2).join("db", "users.json")
     .json();
   const trimmed = nick.trim();
-  const lcusers = keymap(users, name => name.toLowerCase());
+  const lcusers = O.keymap(users, name => name.toLowerCase());
   const user = users[trimmed] ?? lcusers[trimmed];
   if (user !== undefined) {
     const join = user.join ?? "unknown";

@@ -1,4 +1,4 @@
-import env from "runtime-compat/env";
+import env from "rcompat/env";
 
 const getId = message => {
   const regexp =
@@ -25,7 +25,7 @@ export default async (message, channel, c) => {
       .then(res => {
         const [item] = res.items;
         if (item) {
-          const {title, channelTitle} = item.snippet;
+          const { title, channelTitle } = item.snippet;
           return `\x0304,01►\x03 \x0314,01YouTube\x03 :: ${title} | ${channelTitle}`;
         }
         return undefined;

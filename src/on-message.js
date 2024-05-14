@@ -1,16 +1,16 @@
-import {is} from "runtime-compat/dyndef";
-import {Path} from "runtime-compat/fs";
+import { is } from "rcompat/invariant";
+import FS from "rcompat/fs";
 import * as commands from "./commands/exports.js";
 import youtube from "./youtube.js";
 import karma from "./karma.js";
-import {user_langs} from "./commands/lang.js";
+import { user_langs } from "./commands/lang.js";
 
 const command_re = /^(?<prefix>[!+])(?<name>[^ ]*) ?(?<params>.*)/gu;
 const command_names = Object.keys(commands);
 const eq = right => left => left === right;
 
-const languages = await new Path(import.meta.url).up(1)
-  .join("db", "languages.json").file.json();
+const languages = await new FS.File(import.meta.url).up(1)
+  .join("db", "languages.json").json();
 
 const his = [
   "hello",
@@ -68,13 +68,13 @@ export default async (to, message, more) => {
     throw new Error(`invalid message: ${message}`);
   }
 
-  const {prefix, name, params} = match;
+  const { prefix, name, params } = match;
 
   // invalid command
   if (!command_names.some(eq(name))) {
     throw new Error(`invalid command: ${name}`);
   }
 
-  const result = await commands[name](prefix, params, {to, ...more});
+  const result = await commands[name](prefix, params, { to, ...more });
   return say => result.forEach(line => say(to, line));
 };

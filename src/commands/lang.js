@@ -1,15 +1,15 @@
-import {Path} from "runtime-compat/fs";
+import FS from "rcompat/fs";
 
-const languages = await new Path(import.meta.url).up(2)
-  .join("db", "languages.json").file.json();
-const user_langs_file = new Path(import.meta.url).up(2)
-  .join("db", "users_languages.json").file;
+const languages = await new FS.File(import.meta.url).up(2)
+  .join("db", "languages.json").json();
+const user_langs_file = new FS.File(import.meta.url).up(2)
+  .join("db", "users_languages.json");
 const user_langs = await user_langs_file.json();
 const set = "To a set a language, write !lang [language]";
 const options = `Options are: ${ Object.keys(languages.hi).join(" ")}`;
 const follow = [set, options];
 
-export default async (_, language, {from}) => {
+export default async (_, language, { from }) => {
   const $from = from.toLowerCase();
 
   if (language.trim() === "") {
@@ -28,4 +28,4 @@ export default async (_, language, {from}) => {
 
 };
 
-export {user_langs};
+export { user_langs };

@@ -1,6 +1,6 @@
-import {Path} from "runtime-compat/fs";
-import {transform} from "runtime-compat/object";
-import env from "runtime-compat/env";
+import FS from "rcompat/fs";
+import O from "rcompat/object";
+import env from "rcompat/env";
 
 const limit = Number(env.limit);
 
@@ -15,12 +15,12 @@ const getNames = (client, channel) => {
 
 const bot = env.user;
 
-export default async (_, _2, {to, from, client}) => {
-  const users = await new Path(import.meta.url).up(2).join("db", "users.json")
-    .json();
+export default async (_, _2, { to, from, client }) => {
+  const users = await new FS.File(import.meta.url).up(2)
+    .join("db", "users.json").json();
   const present = await getNames(client, to);
   const senders = [bot, from];
-  const names = transform(users, entry => entry
+  const names = O.transform(users, entry => entry
     // exclude users not in channel and the bot
     .filter(([name]) => present.includes(name) && !senders.includes(name))
     // exclude users who have never spoken
