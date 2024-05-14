@@ -4,3 +4,8 @@ package-lock.json
 *output
 .env
 src/db
+karma.json
+
+# editor thingses
+.idea/
+*~

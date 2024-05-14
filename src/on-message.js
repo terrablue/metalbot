@@ -2,6 +2,7 @@ import {is} from "runtime-compat/dyndef";
 import {Path} from "runtime-compat/fs";
 import * as commands from "./commands/exports.js";
 import youtube from "./youtube.js";
+import karma from "./karma.js";
 import {user_langs} from "./commands/lang.js";
 
 const command_re = /^(?<prefix>[!+])(?<name>[^ ]*) ?(?<params>.*)/gu;
@@ -34,6 +35,11 @@ export default async (to, message, more) => {
   const yt = await youtube(message);
   if (yt) {
     return say => say(to, yt);
+  }
+
+  const karma = await karma(message, to, more);
+  if(karma) {
+    return say => say(to, karma);
   }
 
   if (his.includes(message.toLowerCase().trim())) {
