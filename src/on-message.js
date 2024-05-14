@@ -37,9 +37,9 @@ export default async (to, message, more) => {
     return say => say(to, yt);
   }
 
-  const karma = await karma(message, to, more);
-  if(karma) {
-    return say => say(to, karma);
+  const karma_result = await karma(message, to, more);
+  if(karma_result) {
+    return say => karma_result.forEach(line => say(to, line));
   }
 
   if (his.includes(message.toLowerCase().trim())) {
