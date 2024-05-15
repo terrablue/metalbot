@@ -8,7 +8,15 @@ const bar = {client: "weechat", from: "bar"};
 
 export default test => {
   test.setup(async () => {
-    await File.remove("./karma.json");
+    console.log("removing karma.json")
+    await File.remove("src/db/karma.json");
+  });
+
+  test.case("matches", async assert => {
+    assert(await karma("foo bar++", channel, foo)).equals([
+        "foo bar has a karma level of 1"
+    ]);
+    assert(await karma("foo+bar++", channel, foo)).equals(undefined);
   });
 
   test.case("++", async assert => {

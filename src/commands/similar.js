@@ -1,5 +1,8 @@
 import OpenAI from "openai";
+import dotenv from "dotenv";
 import env from "rcompat/env";
+
+dotenv.config();
 const openai = new OpenAI({ apiKey: env.openai_api_key });
 
 const prompt = `(Make a recommendation for metal bands similar to the following 
