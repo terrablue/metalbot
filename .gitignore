@@ -5,6 +5,7 @@ package-lock.json
 .env
 src/db
 karma.json
+bot.conf.js
 
 # editor thingses
 .idea/

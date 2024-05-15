@@ -10,14 +10,12 @@
     "test": "mocha"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
     "irc-upd": "^0.11.0",
     "openai": "^4.11.1",
     "rcompat": "^0.11.1"
   },
   "devDependencies": {
     "debris": "^0.14.0",
-    "maximin": "^0.2.2",
-    "mocha": "^10.4.0"
+    "maximin": "^0.2.2"
   }
 }
