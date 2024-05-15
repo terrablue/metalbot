@@ -10,7 +10,7 @@ export default test => {
 
   test.case("get remote: no results", async assert => {
     const result = await get("Blind Guardians");
-    assert(result).equals(["no results"]);
+    assert(result).equals(["no results | add with +band name=<name>, year=<year>, country=<country>, genres=<genre1>;<genre2>"]);
   });
 
   test.case("get remote: different cases", async assert => {

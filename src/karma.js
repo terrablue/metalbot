@@ -1,24 +1,32 @@
+import path from 'path';
 import fs from "fs";
-
+const dbpath="src/db";
 const datafile = "karma.json";
-const plusPattern = /(.+)(\+\+)/;
-const minusPattern = /(.+)(--)/;
 
-function karmaCheck(str) {
-  let match;
-  if (match = str.match(plusPattern)) {
-    return {frame: match[1].toString(), pattern: match[2].toString()};
-  } else if (match = str.match(minusPattern)) {
-    return {frame: match[1].toString(), pattern: match[2].toString()};
+function karmaCheck(input) {
+  // Regular expression to match valid karma change with optional trailing colon
+  const karmaRegex = /^([a-zA-Z0-9\s]+):?\s*(\+\+|--)\s*$/;
+
+  // Match the input string against the regex
+  const match = input.match(karmaRegex);
+
+  // If there's no match, return null indicating an invalid karma change
+  if (!match) {
+    return null;
   }
-  return null;
 
+  // Extract subject and change from the match groups
+  let frame = match[1].trim();
+  const pattern = match[2];
+
+  // Return the subject and change as an object
+  return { frame, pattern };
 }
 
 function readDb() {
   try {
-    if (fs.existsSync(datafile)) {
-      const data = fs.readFileSync(datafile, "utf8");
+    if (fs.existsSync(path.join(dbpath,datafile))) {
+      const data = fs.readFileSync(path.join(dbpath,datafile), "utf8");
       return JSON.parse(data);
     }
     return {};
@@ -29,7 +37,7 @@ function readDb() {
 }
 
 function writeDb(data) {
-  fs.writeFileSync(datafile, JSON.stringify(data || {}, null, 2));
+  fs.writeFileSync(path.join(dbpath,datafile), JSON.stringify(data || {}, null, 2));
 }
 
 export default async (message, channel, more) => {
