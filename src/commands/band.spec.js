@@ -3,6 +3,8 @@ import band from "./band.js";
 const get = query => band("!", query);
 const set = query => band("+", query);
 
+const no_results_str = "no results | add with +band name=<name>, year=<year>, country=<country>, genres=<genre1>;<genre2>";
+
 export default test => {
   test.case("unsupported prefix", assert => {
     assert(band("-", "param")).equals(["prefix \"-\" not supported"]);
@@ -10,7 +12,7 @@ export default test => {
 
   test.case("get remote: no results", async assert => {
     const result = await get("Blind Guardians");
-    assert(result).equals(["no results | add with +band name=<name>, year=<year>, country=<country>, genres=<genre1>;<genre2>"]);
+    assert(result).equals([no_results_str]);
   });
 
   test.case("get remote: different cases", async assert => {
@@ -18,7 +20,7 @@ export default test => {
       .map(async query => {
         const result = await get(query);
         assert(result).equals([
-          "Blind Guardian [Germany, 1987]: Speed Metal (early); Power Metal (later)",
+          "Blind Guardian [Germany, 1987]: Speed Metal (early); Power Metal (later) [MA]",
         ]);
       }));
   });
@@ -26,21 +28,21 @@ export default test => {
   test.case("special characters", async assert => {
     const result = await get("Demons & Wizards");
     assert(result).equals([
-      "Demons & Wizards [United States, 1997]: Power Metal",
+      "Demons & Wizards [United States, 1997]: Power Metal [MA]",
     ]);
   });
 
   test.case("get remote: 1-20 results", async assert => {
     const result = await get("Crash Test");
     assert(result).equals([
-      "Crash Test [Argentina, 1999]: Groove Metal",
-      "Crash Test [Russia, 2004]: Heavy Metal/Hard Rock",
+      "Crash Test [Argentina, 1999]: Groove Metal [MA]",
+      "Crash Test [Russia, 2004]: Heavy Metal/Hard Rock [MA]",
     ]);
   });
 
   test.case("get local: no results", async assert => {
     const result = await get("Jinjer2");
-    assert(result).equals(["no results"]);
+    assert(result).equals([no_results_str]);
   });
 
   test.case("get local: different cases", async assert => {
@@ -48,7 +50,7 @@ export default test => {
       .map(async query => {
         const result = await get(query);
         assert(result).equals([
-          "Jinjer [Ukraine, 2008]: Metalcore; Progressive Metal",
+          "Jinjer [Ukraine, 2008]: Metalcore; Progressive Metal [local]",
         ]);
       }));
   });

@@ -30,5 +30,5 @@ echo "[]" > src/db/users_languages.json
 To test, run:
 
 ```shell
-npx debris
+npm test
 ```

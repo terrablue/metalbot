@@ -1,5 +1,4 @@
-import karma from "./karma.js";
-import { File }from "rcompat/fs";
+import { default as karma, db } from "./karma.js";
 
 const channel = "#metal";
 const foo = { client: "weechat", from: "foo" };
@@ -8,7 +7,7 @@ const bar = { client: "weechat", from: "bar" };
 export default test => {
   test.setup(async () => {
     console.log("removing karma.json");
-    await File.remove("db/karma.json");
+    await db.remove();
   });
 
   test.case("matches", async assert => {

@@ -5,7 +5,10 @@ const db = {
   path: "db",
   datafile: "karma.json",
   get file() {
-    return FS.File.join(this.path, this.datafile);
+    return FS.File.join(import.meta.dirname, this.path, this.datafile);
+  },
+  async remove() {
+    await this.file.remove();
   },
   async read() {
     const { file } = this;
@@ -68,3 +71,6 @@ export default async (message, channel, more) => {
   }
   return undefined;
 };
+
+export { db };
+
