@@ -1,20 +1,19 @@
 import karma from "./karma.js";
-import {File}from "rcompat/fs";
+import { File }from "rcompat/fs";
 
-//const run = async (...args) => (await _run(...args)).lines;
 const channel = "#metal";
-const foo = {client: "weechat", from: "foo"};
-const bar = {client: "weechat", from: "bar"};
+const foo = { client: "weechat", from: "foo" };
+const bar = { client: "weechat", from: "bar" };
 
 export default test => {
   test.setup(async () => {
-    console.log("removing karma.json")
-    await File.remove("src/db/karma.json");
+    console.log("removing karma.json");
+    await File.remove("db/karma.json");
   });
 
   test.case("matches", async assert => {
     assert(await karma("foo bar++", channel, foo)).equals([
-        "foo bar has a karma level of 1"
+      "foo bar has a karma level of 1",
     ]);
     assert(await karma("foo+bar++", channel, foo)).equals(undefined);
   });
@@ -38,5 +37,4 @@ export default test => {
     const result_foo2 = await karma("foo--", channel, bar);
     assert(result_foo2).equals(["foo has a karma level of -2"]);
   });
-
 };

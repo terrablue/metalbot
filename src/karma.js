@@ -1,7 +1,21 @@
-import path from 'path';
-import fs from "fs";
-const dbpath="src/db";
-const datafile = "karma.json";
+import FS from "rcompat/fs";
+import { tryreturn } from "rcompat/async";
+
+const db = {
+  path: "db",
+  datafile: "karma.json",
+  get file() {
+    return FS.File.join(this.path, this.datafile);
+  },
+  async read() {
+    const { file } = this;
+    return tryreturn(async () => await file.exists() ? file.json() : {})
+      .orelse(_ => ({}));
+  },
+  async write(data = {}) {
+    await this.file.write(JSON.stringify(data, null, 2));
+  },
+};
 
 function karmaCheck(input) {
   // Regular expression to match valid karma change with optional trailing colon
@@ -16,35 +30,18 @@ function karmaCheck(input) {
   }
 
   // Extract subject and change from the match groups
-  let frame = match[1].trim();
+  const frame = match[1].trim();
   const pattern = match[2];
 
   // Return the subject and change as an object
   return { frame, pattern };
 }
 
-function readDb() {
-  try {
-    if (fs.existsSync(path.join(dbpath,datafile))) {
-      const data = fs.readFileSync(path.join(dbpath,datafile), "utf8");
-      return JSON.parse(data);
-    }
-    return {};
-
-  } catch (error) {
-    return {};
-  }
-}
-
-function writeDb(data) {
-  fs.writeFileSync(path.join(dbpath,datafile), JSON.stringify(data || {}, null, 2));
-}
-
 export default async (message, channel, more) => {
-  const {client, from} = more || {};
+  const { client, from } = more || {};
   const karma = karmaCheck(message);
   if (karma !== null) {
-    const karmaDb = readDb();
+    const karmaDb = await db.read();
     let karmaValue = karmaDb[karma.frame] || 0;
     const responses = [];
     if(karma.frame === from && karma.pattern === "++") {
@@ -56,13 +53,13 @@ export default async (message, channel, more) => {
     case "--":
       karmaValue--;
       karmaDb[karma.frame] = karmaValue;
-      writeDb(karmaDb);
+      await db.write(karmaDb);
       responses.push(`${karma.frame} has a karma level of ${karmaValue}`);
       return responses;
     case "++":
       karmaValue++;
       karmaDb[karma.frame] = karmaValue;
-      writeDb(karmaDb);
+      await db.write(karmaDb);
       responses.push(`${karma.frame} has a karma level of ${karmaValue}`);
       return responses;
     default:
