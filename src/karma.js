@@ -1,7 +1,7 @@
 import FS from "rcompat/fs";
 import { tryreturn } from "rcompat/async";
 
-let lastSpeaker=undefined;
+let lastSpeaker = undefined;
 
 const db = {
   path: "db",
@@ -24,7 +24,7 @@ const db = {
 
 function karmaCheck(input) {
   // Regular expression to match valid karma change with optional trailing colon
-  const karmaRegex = /^(.+):?\s*(\+\+|--)\s*$/;
+  const karmaRegex = /^(.+?):?\s*(\+\+|--)\s*$/u;
 
   // Match the input string against the regex
   const match = input.match(karmaRegex);
@@ -44,12 +44,12 @@ function karmaCheck(input) {
 
 export default async (message, channel, more) => {
   const { client, from } = more || {};
-  if(message==='^') {
-    if(lastSpeaker && from!==lastSpeaker) {
-      message=lastSpeaker+"++";
+  if(message === "^") {
+    if(lastSpeaker && from !== lastSpeaker) {
+      message = `${lastSpeaker }++`;
     }
   } else {
-    lastSpeaker=from;
+    lastSpeaker = from;
   }
   const karma = karmaCheck(message);
   if (karma !== null) {
