@@ -1,6 +1,7 @@
-import { default as ranking, cutoff } from "./ranking.js";
+import { default as rankingfn, cutoff } from "./ranking.js";
 
 export default async _ => {
+  const ranking = await rankingfn();
   const top = ranking.slice(0, cutoff);
   const bottom = ranking.slice(-cutoff);
   const midlurkers = ranking.length - cutoff * cutoff;

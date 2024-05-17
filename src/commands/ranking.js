@@ -2,7 +2,7 @@ import { db } from "../karma.js";
 
 const cutoff = 2;
 
-const ranking = Object.entries(Object.entries(await db.read())
+const ranking = async () => Object.entries(Object.entries(await db.read())
   .reduce((folded, [key, value]) =>
     ({ ...folded, [value]: folded[value] ? [...folded[value], key] : [key] })
   , {}))
