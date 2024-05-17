@@ -1,13 +1,6 @@
-import { db } from "../karma.js";
-
-const cutoff = 2;
+import { default as ranking, cutoff } from "./ranking.js";
 
 export default async _ => {
-  const ranking = Object.entries(Object.entries(await db.read())
-    .reduce((folded, [key, value]) =>
-      ({ ...folded, [value]: folded[value] ? [...folded[value], key] : [key] })
-    , {}))
-    .toSorted(([a], [b]) => Math.sign(b - a));
   const top = ranking.slice(0, cutoff);
   const bottom = ranking.slice(-cutoff);
   const midlurkers = ranking.length - cutoff * cutoff;
