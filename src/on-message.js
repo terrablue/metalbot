@@ -13,10 +13,12 @@ const languages = await new FS.File(import.meta.url).up(1)
   .join("db", "languages.json").json();
 
 const his = [
+  "akuo",
   "hello",
   "hi",
   "hola",
   "hullo",
+  "shalom",
   "yo",
   "אהלן",
   "היי",
