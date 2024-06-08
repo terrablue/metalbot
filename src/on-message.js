@@ -15,9 +15,12 @@ const languages = await new FS.File(import.meta.url).up(1)
 const his = [
   "hello",
   "hi",
-  "hullo",
   "hola",
+  "hullo",
+  "yo",
+  "אהלן",
   "היי",
+  "יו",
   "שלום",
 ];
 
