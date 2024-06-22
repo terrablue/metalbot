@@ -1,9 +1,9 @@
-import FS from "rcompat/fs";
+import { file } from "rcompat/fs";
 
-const db = new FS.File(import.meta.url).up(2).join("db", "bands.json");
+const db = file(import.meta.url).up(2).join("db", "bands.json");
 const bands = await db.json();
 
-const base = new FS.File("https://www.metal-archives.com/search");
+const base = file("https://www.metal-archives.com/search");
 const uris = {
   bands: query => base.join(`ajax-advanced/searching/bands/?exactBandMatch=1&bandName=${query}`),
 };

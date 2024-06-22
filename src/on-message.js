@@ -1,5 +1,5 @@
 import { is } from "rcompat/invariant";
-import FS from "rcompat/fs";
+import { file } from "rcompat/fs";
 import * as commands from "./commands/exports.js";
 import youtube from "./youtube.js";
 import karma from "./karma.js";
@@ -9,7 +9,7 @@ const command_re = /^(?<prefix>[!+])(?<name>[^ ]*) ?(?<params>.*)/gu;
 const command_names = Object.keys(commands);
 const eq = right => left => left === right;
 
-const languages = await new FS.File(import.meta.url).up(1)
+const languages = await file(import.meta.url).up(1)
   .join("db", "languages.json").json();
 
 const his = [

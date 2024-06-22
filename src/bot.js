@@ -1,10 +1,10 @@
-import FS from "rcompat/fs";
+import { file } from "rcompat/fs";
 import env from "rcompat/env";
 import irc from "irc-upd";
 import on_message from "./on-message.js";
 
 const { network, user, channels, password } = env;
-const users = new FS.File(import.meta.url).up(1).join("db", "users.json");
+const users = file(import.meta.url).up(1).join("db", "users.json");
 
 const client = new irc.Client(network, user, {
   channels: channels.split(";"),

@@ -1,8 +1,8 @@
-import FS from "rcompat/fs";
+import { file } from "rcompat/fs";
 
-const languages = await new FS.File(import.meta.url).up(2)
+const languages = await file(import.meta.url).up(2)
   .join("db", "languages.json").json();
-const user_langs_file = new FS.File(import.meta.url).up(2)
+const user_langs_file = file(import.meta.url).up(2)
   .join("db", "users_languages.json");
 const user_langs = await user_langs_file.json();
 const set = "To a set a language, write !lang [language]";

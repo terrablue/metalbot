@@ -1,11 +1,11 @@
-import FS from "rcompat/fs";
-import O from "rcompat/object";
+import { file } from "rcompat/fs";
+import { keymap } from "rcompat/object";
 
 export default async (_, nick) => {
-  const users = await new FS.File(import.meta.url).up(2).join("db", "users.json")
+  const users = await file(import.meta.url).up(2).join("db", "users.json")
     .json();
   const trimmed = nick.trim();
-  const lcusers = O.keymap(users, name => name.toLowerCase());
+  const lcusers = keymap(users, name => name.toLowerCase());
   const user = users[trimmed] ?? lcusers[trimmed];
   if (user !== undefined) {
     const join = user.join ?? "unknown";

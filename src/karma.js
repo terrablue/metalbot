@@ -1,4 +1,4 @@
-import FS from "rcompat/fs";
+import { join } from "rcompat/fs";
 import { tryreturn } from "rcompat/async";
 
 let lastSpeaker = undefined;
@@ -7,7 +7,7 @@ const db = {
   path: "db",
   datafile: "karma.json",
   get file() {
-    return FS.File.join(import.meta.dirname, this.path, this.datafile);
+    return join(import.meta.dirname, this.path, this.datafile);
   },
   async remove() {
     await this.file.remove();
